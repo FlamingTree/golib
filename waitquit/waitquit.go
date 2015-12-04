@@ -25,10 +25,10 @@ func (wq WaitQuit) Wrap(cb func()) {
 	wq.Add(1)
 	go func() {
 		cb()
-		wq.Done()
+		wq.WaitGroup.Done()
 	}()
 }
 
-func (wq WaitQuit) Done() struct{} {
+func (wq WaitQuit) Done() <-chan struct{} {
 	return wq.exitChan
 }
