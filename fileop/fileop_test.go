@@ -13,7 +13,41 @@ func init() {
 }
 
 func TestLineCount(t *testing.T) {
-	Convey("line count test", t, func() {
+	Convey("LineCount test", t, func() {
+		Convey("not exist file test", func() {
+			cnt, err := LineCount("not exist")
+			So(err, ShouldNotBeNil)
+			So(cnt, ShouldBeZeroValue)
+		})
+
+		Convey("empty file test", func() {
+			fileName := "empty"
+			file, err := os.Create(fileName)
+			file.Close()
+
+			cnt, err := LineCount(fileName)
+			So(err, ShouldBeNil)
+			So(cnt, ShouldBeZeroValue)
+		})
+
+		Convey("non empty file test", func() {
+			fileName := "notempty"
+			file, _ := os.Create(fileName)
+			cnt := 100000
+			for i := 0; i < cnt; i++ {
+				file.WriteString(fmt.Sprintf("i = %d\n", i))
+			}
+			file.Close()
+
+			lineCnt, err := LineCount(fileName)
+			So(err, ShouldBeNil)
+			So(lineCnt, ShouldEqual, cnt)
+		})
+	})
+}
+
+func TestYALineCount(t *testing.T) {
+	Convey("YALineCount test", t, func() {
 		Convey("not exit file test", func() {
 			cnt, err := LineCount("not exist")
 			So(err, ShouldNotBeNil)

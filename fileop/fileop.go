@@ -1,6 +1,7 @@
 package fileop
 
 import (
+	"bufio"
 	"bytes"
 	"io"
 	"os"
@@ -34,5 +35,23 @@ func LineCount(filename string) (cnt int, err error) {
 			return
 		}
 	}
+	return
+}
+
+func YALineCount(filename string) (cnt int, err error) {
+	var (
+		file *os.File
+	)
+	if file, err = os.Open(filename); err != nil {
+		return
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		cnt++
+	}
+
+	err = scanner.Err()
 	return
 }
