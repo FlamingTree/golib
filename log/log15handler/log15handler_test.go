@@ -1,7 +1,7 @@
 package log15handler
 
 import (
-	"bufio"
+	"github.com/FlamingTree/golib/fileop"
 	. "github.com/smartystreets/goconvey/convey"
 	"gopkg.in/inconshreveable/log15.v2"
 	"os"
@@ -19,21 +19,6 @@ localtime = true`[1:]
 		_, err := RollingFileHandler(conf, log15.LogfmtFormat())
 		So(err, ShouldBeNil)
 	})
-}
-
-func lineCount(filePath string) (cnt int, err error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return
-	}
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		cnt++
-	}
-
-	err = scanner.Err()
-	return
 }
 
 func TestSafeBufferChannel(t *testing.T) {
@@ -55,7 +40,7 @@ func TestSafeBufferChannel(t *testing.T) {
 			log.Info("test", "i", i)
 		}
 		bufferHandler.(*SafeBufferHandler).Exit()
-		lineCnt, err := lineCount(filePath)
+		lineCnt, err := fileop.LineCount(filePath)
 		So(err, ShouldBeNil)
 		So(lineCnt, ShouldEqual, cnt)
 	})
