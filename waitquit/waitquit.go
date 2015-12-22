@@ -29,6 +29,6 @@ func (wq WaitQuit) Wrap(cb func()) {
 	}()
 }
 
-func (wq WaitQuit) Done() <-chan struct{} {
+func (wq WaitQuit) DoneNotify() <-chan struct{} {
 	return wq.exitChan
 }
